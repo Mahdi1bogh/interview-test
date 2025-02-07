@@ -7,7 +7,7 @@ async function bootstrap() {
   // hello world
 
   app.enableCors({
-    origin: 'interview-test-seven.vercel.app', 
+    origin: 'https://interview-test-seven.vercel.app', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
     credentials: true, 
   });
