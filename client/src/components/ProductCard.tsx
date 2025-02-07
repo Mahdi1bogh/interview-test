@@ -44,8 +44,9 @@ export default function ProductCard({ product, onBuy }: ProductCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       whileHover={{ y: -5 }}
+      className="h-full"
     >
-      <Card className="group overflow-hidden">
+      <Card className="group overflow-hidden flex flex-col h-full">
         <CardHeader className="p-0">
           <div className="aspect-square relative overflow-hidden">
             <Image
@@ -65,10 +66,10 @@ export default function ProductCard({ product, onBuy }: ProductCardProps) {
             )}
           </div>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-4 flex-1">
           <CardTitle className="line-clamp-1 mb-2">{product.name}</CardTitle>
           <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-            {product.description}
+            {product.description.split("\n").slice(0, 2).join("\n")}
           </p>
           <div className="flex items-center justify-between">
             <p className="text-lg font-bold">${product.price.toFixed(2)}</p>

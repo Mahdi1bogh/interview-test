@@ -14,7 +14,7 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "4+Ventures store",
-  description: "The easiest way to to showcase your projects and skills.",
+  description: "Best ecommerce store in the world",
 };
 
 const geistSans = Geist({
@@ -68,7 +68,7 @@ export default function RootLayout({
                         variant={"ghost"}
                         className="w-fit bg-transparent"
                       >
-                        <Link href="/jobs">Products</Link>
+                        <Link href="/">Products</Link>
                       </Button>
                     </div>
                   </div>
@@ -82,7 +82,7 @@ export default function RootLayout({
             </div>
           </div>
         </ThemeProvider>
-        <Toaster />
+        <Toaster position="top-center" />{" "}
       </body>
     </html>
   );
