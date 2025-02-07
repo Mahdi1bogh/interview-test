@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import AddToCartButton from "./add-to-cart-button";
 
 interface ProductCardProps {
   product: {
@@ -78,7 +79,7 @@ export default function ProductCard({ product, onBuy }: ProductCardProps) {
             </p>
           </div>
         </CardContent>
-        <CardFooter className="p-4 pt-0">
+        <CardFooter className="p-4 space-x-1 pt-0">
           <Button
             className="w-full transition-all"
             onClick={handleBuy}
@@ -98,6 +99,7 @@ export default function ProductCard({ product, onBuy }: ProductCardProps) {
               "Out of Stock"
             )}
           </Button>
+          <AddToCartButton product={product} />
         </CardFooter>
       </Card>
     </motion.div>
