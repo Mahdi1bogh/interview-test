@@ -73,6 +73,7 @@ export default function RootLayout({
                         >
                           <Link href="/">Products</Link>
                         </Button>
+                        {/*  */}
                         <CartButton />
                       </div>
                     </div>
