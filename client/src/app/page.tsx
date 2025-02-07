@@ -21,7 +21,8 @@ export default function ProductsPage() {
   const buyProduct = async (product: Product) => {
     try {
       const response = await fetch(
-        `https://interview-test-5hkw.onrender.com/products/${product.id}/purchase`,
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          `/products/${product.id}/purchase`,
         {
           method: "POST",
           headers: {
@@ -35,7 +36,7 @@ export default function ProductsPage() {
         throw new Error("Failed to buy product");
       }
 
-      const { data } = await response.json();
+      const data = await response.json();
       if (!data.success) {
         throw new Error(data.message);
       }
@@ -58,7 +59,7 @@ export default function ProductsPage() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "https://interview-test-5hkw.onrender.com/products",
+          process.env.NEXT_PUBLIC_BACKEND_URL + "/products",
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },

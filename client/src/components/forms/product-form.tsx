@@ -37,7 +37,7 @@ export default function CreateProduct() {
 
   const onSubmit = async (data: ProductFormValues) => {
     const response = await fetch(
-      "https://interview-test-5hkw.onrender.com/products",
+      process.env.NEXT_PUBLIC_BACKEND_URL + "/products",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
