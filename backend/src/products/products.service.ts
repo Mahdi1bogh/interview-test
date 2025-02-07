@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-// src/products/products.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
