@@ -21,12 +21,13 @@ export default function ProductsPage() {
   const buyProduct = async (product: Product) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/products/${product.id}`,
+        `https://interview-test-5hkw.onrender.com/products/${product.id}/purchase`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({}),
         }
       );
 
@@ -56,11 +57,20 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/products");
+        const response = await fetch(
+          "https://interview-test-5hkw.onrender.com/products",
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
+        );
+
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
-        const { data } = await response.json();
+        const data = await response.json();
+        console.log("response data", data);
         setProducts(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");

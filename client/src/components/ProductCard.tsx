@@ -72,7 +72,7 @@ export default function ProductCard({ product, onBuy }: ProductCardProps) {
             {product.description.split("\n").slice(0, 2).join("\n")}
           </p>
           <div className="flex items-center justify-between">
-            <p className="text-lg font-bold">${product.price.toFixed(2)}</p>
+            <p className="text-lg font-bold">${product.price}</p>
             <p className="text-sm text-muted-foreground">
               Stock: {product.supply}
             </p>
