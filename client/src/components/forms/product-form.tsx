@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ProductFormValues } from "@/lib/validations/product-validation";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 export const productSchema = z.object({
@@ -22,10 +21,11 @@ export const productSchema = z.object({
   price: z.number().min(0, "Price must be a positive number"),
   supply: z.number().min(0, "Supply must be a positive number"),
 });
+type productFormType = z.infer<typeof productSchema>;
+
 export default function CreateProduct() {
   const router = useRouter();
-
-  const form = useForm<ProductFormValues>({
+  const form = useForm<productFormType>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
@@ -35,7 +35,7 @@ export default function CreateProduct() {
     },
   });
 
-  const onSubmit = async (data: ProductFormValues) => {
+  const onSubmit = async (data: productFormType) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_BACKEND_URL + "/products",
       {
