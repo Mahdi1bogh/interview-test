@@ -7,10 +7,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Product } from './products/entities/product.entity';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './users/auth/auth.module';
+import { User } from './users/entities/user.entity';
+import { OrdersModule } from './orders/orders.module';
+import { Order } from './orders/entities/order.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), 
+    ConfigModule.forRoot({ isGlobal: true }), 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -20,12 +25,15 @@ import { Product } from './products/entities/product.entity';
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DATABASE'),
         url: configService.get<string>('POSTGRES_URL'),
-        entities: [Product],
+        entities: [Product,User,Order],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
     ProductsModule,
+    UsersModule,
+    OrdersModule,
   ],
 })
 export class AppModule {}
