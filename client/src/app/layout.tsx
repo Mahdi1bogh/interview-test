@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CartProvider } from "@/contexts/cart-context";
 import CartButton from "@/components/cart-button";
+import type React from "react";
+import { MobileNav } from "@/components/mobile-nav";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -52,12 +54,12 @@ export default function RootLayout({
                           height={32}
                         />
                       </Link>
-                      <span className="text-sm font-[family-name:var(--font-geist-mono)]">
+                      <span className="text-sm font-[family-name:var(--font-geist-mono)] hidden sm:inline-block">
                         4+Ventures store
                       </span>
                     </div>
-                    <div className=" space-x-4 z-1000 ml-auto">
-                      <div className="flex items-center gap-x-2">
+                    <div className="space-x-4 z-1000 ml-auto flex items-center">
+                      <div className="hidden sm:flex items-center gap-x-2">
                         <ThemeSwitcher />
                         <Button
                           asChild
@@ -73,9 +75,11 @@ export default function RootLayout({
                         >
                           <Link href="/">Products</Link>
                         </Button>
-                        {/*  */}
-                        <CartButton />
                       </div>
+                      <div className="sm:hidden">
+                        <MobileNav />
+                      </div>
+                      <CartButton />
                     </div>
                   </div>
                 </nav>
@@ -88,7 +92,7 @@ export default function RootLayout({
             </div>
           </CartProvider>
         </ThemeProvider>
-        <Toaster position="top-center" />{" "}
+        <Toaster position="top-center" />
       </body>
     </html>
   );
