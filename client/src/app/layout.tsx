@@ -2,12 +2,10 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Toaster } from "sonner";
-import Link from "next/link";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { CartProvider } from "@/contexts/cart-context";
-import CartButton from "@/components/cart-button";
+import { UserProvider } from "@/contexts/user-context";
+import Navbar from "@/components/navbar";
+import type React from "react";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -38,57 +36,22 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <CartProvider>
-            <div className="w-full h-full">
-              <div className="max-w-screen lg:max-w-[900px] sm:mx-8 mx-4 lg:mx-auto overflow-hidden">
-                <nav className="backdrop-blur bg-background/50 lg:max-w-[900px] sm:mx-8 mx-4 lg:mx-auto shadow-sm z-50 m-4 border rounded-xl mb-0 border-muted-accent/40 fixed top-0 left-0 right-0">
-                  <div className="flex flex-row justify-between px-4 py-2 z-100">
-                    <div className="flex items-center space-x-2">
-                      <Link href="/">
-                        <Image
-                          src="https://media.licdn.com/dms/image/v2/D4D0BAQFYDZFOuXPAOA/company-logo_100_100/company-logo_100_100/0/1738788906242/4_ventures_logo?e=1747267200&v=beta&t=tmp8v40aXXXq9EAUG4LYeAIa3JTkM4ohjHP96IRBCuc"
-                          alt="logo"
-                          width={32}
-                          height={32}
-                        />
-                      </Link>
-                      <span className="text-sm font-[family-name:var(--font-geist-mono)]">
-                        4+Ventures store
-                      </span>
+          <UserProvider>
+            <CartProvider>
+              <div className="w-full h-full">
+                <div className="max-w-screen lg:max-w-[900px] sm:mx-8 mx-4 lg:mx-auto overflow-hidden">
+                  <Navbar />
+                  <main className="mt-12 lg:mt-24">
+                    <div className="container py-20 px-4 max-w-4xl md:px-0 w-full">
+                      {children}
                     </div>
-                    <div className=" space-x-4 z-1000 ml-auto">
-                      <div className="flex items-center gap-x-2">
-                        <ThemeSwitcher />
-                        <Button
-                          asChild
-                          variant={"ghost"}
-                          className="w-fit bg-transparent"
-                        >
-                          <Link href="/create">Create product</Link>
-                        </Button>
-                        <Button
-                          asChild
-                          variant={"ghost"}
-                          className="w-fit bg-transparent"
-                        >
-                          <Link href="/">Products</Link>
-                        </Button>
-                        {/*  */}
-                        <CartButton />
-                      </div>
-                    </div>
-                  </div>
-                </nav>
-                <main className="mt-12 lg:mt-24">
-                  <div className="container py-20 px-4 max-w-4xl md:px-0 w-full">
-                    {children}
-                  </div>
-                </main>
+                  </main>
+                </div>
               </div>
-            </div>
-          </CartProvider>
+            </CartProvider>
+          </UserProvider>
         </ThemeProvider>
-        <Toaster position="top-center" />{" "}
+        <Toaster position="top-center" />
       </body>
     </html>
   );

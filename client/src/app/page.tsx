@@ -1,6 +1,7 @@
 "use client";
 
 import ProductCard from "@/components/ProductCard";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -8,7 +9,7 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  imageUrl: string;
+  images: string[];
   price: number;
   supply: number;
 }
@@ -58,21 +59,10 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          process.env.NEXT_PUBLIC_BACKEND_URL + "/products",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
+        const response = await axios.get(
+          process.env.NEXT_PUBLIC_BACKEND_URL + "/products"
         );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-        const data = await response.json();
-        console.log("response data", data);
-        setProducts(data);
+        setProducts(response.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {

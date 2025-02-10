@@ -20,7 +20,7 @@ interface ProductCardProps {
     id: number;
     name: string;
     description: string;
-    imageUrl: string;
+    images: string[];
     price: number;
     supply: number;
   };
@@ -51,7 +51,7 @@ export default function ProductCard({ product, onBuy }: ProductCardProps) {
         <CardHeader className="p-0">
           <div className="aspect-square relative overflow-hidden">
             <Image
-              src={product.imageUrl || "/placeholder.svg"}
+              src={product.images[0]}
               alt={product.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-110"
