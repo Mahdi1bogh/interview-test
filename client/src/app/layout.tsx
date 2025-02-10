@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { CartProvider } from "@/contexts/cart-context";
+
 import { UserProvider } from "@/contexts/user-context";
 import Navbar from "@/components/navbar";
 import type React from "react";

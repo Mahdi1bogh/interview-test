@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import AddToCartButton from "./add-to-cart-button";
+import { buyProduct } from "@/lib/api";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: {
@@ -27,13 +29,25 @@ interface ProductCardProps {
   onBuy: (product: ProductCardProps["product"]) => Promise<void>;
 }
 
-export default function ProductCard({ product, onBuy }: ProductCardProps) {
+export default function ProductCard({
+  product: initialProduct,
+}: ProductCardProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [product, setProduct] =
+    useState<ProductCardProps["product"]>(initialProduct);
 
   const handleBuy = async () => {
     setIsLoading(true);
     try {
-      await onBuy(product);
+      await buyProduct(product.id);
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        supply: prevProduct.supply - 1,
+      }));
+      toast.success(`You've bought ${product.name}`);
+    } catch (error) {
+      console.error(error);
+      toast.error("Purchase failed");
     } finally {
       setIsLoading(false);
     }
