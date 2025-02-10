@@ -16,7 +16,6 @@ import { Badge } from "@/components/ui/badge";
 import AddToCartButton from "./add-to-cart-button";
 import { buyProduct } from "@/lib/api";
 import { toast } from "sonner";
-
 interface ProductCardProps {
   product: {
     id: number;
@@ -25,6 +24,11 @@ interface ProductCardProps {
     images: string[];
     price: number;
     supply: number;
+    category: {
+      id: number;
+      title: string;
+    };
+    avgRating: number;
   };
   onBuy: (product: ProductCardProps["product"]) => Promise<void>;
 }
