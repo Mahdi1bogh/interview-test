@@ -158,6 +158,7 @@ export default function ProductsPage() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Products</h1>
+
       <div className="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div>
           <Label htmlFor="search">Search</Label>
@@ -235,7 +236,13 @@ export default function ProductsPage() {
         </Button>
         <Button onClick={applyFilters}>Apply Filters</Button>
       </div>
+
       <p className="mb-4">Total Products: {totalProducts}</p>
+      {loading && (
+        <p className="font-semibold mb-6">
+          This may take a while please bear with us ...
+        </p>
+      )}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(8)].map((_, i) => (

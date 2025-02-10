@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className="dark:bg-background bg-muted text-foreground">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
