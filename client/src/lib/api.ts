@@ -4,13 +4,13 @@ export interface Product {
   id: number
   name: string
   description: string
-  imageUrl: string
+  images: string[]
   price: number
   supply: number
 }
 
 export const getProducts = cache(async (): Promise<Product[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/all`, {
     headers: { "Content-Type": "application/json" },
     cache: "no-store",
   })
