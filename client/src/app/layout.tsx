@@ -42,6 +42,7 @@ export default function RootLayout({
               <div className="w-full h-full">
                 <div className="max-w-screen lg:max-w-[900px] sm:mx-8 mx-4 lg:mx-auto overflow-hidden">
                   <Navbar />
+
                   <main className="mt-12 lg:mt-24">
                     <div className="container py-20 px-4 max-w-4xl md:px-0 w-full">
                       {children}

@@ -28,6 +28,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useUser } from "@/contexts/user-context";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -40,6 +41,7 @@ const formSchema = z.object({
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const { setUser } = useUser();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,7 +60,9 @@ export default function SignInPage() {
         values
       );
       localStorage.setItem("accessToken", response.data.accessToken);
+      setUser(response.data.user);
       router.push("/");
+
       toast.success("You have successfully signed in.");
     } catch (error) {
       console.log(error);
@@ -70,6 +74,9 @@ export default function SignInPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div>
+        <p>admin | email: midou@hotmail.com | password: 123456789</p>
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
