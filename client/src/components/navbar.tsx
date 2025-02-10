@@ -7,6 +7,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import CartButton from "@/components/cart-button";
 import { useUser } from "@/contexts/user-context";
 import { useCallback } from "react";
+import { Github } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout, isLoading } = useUser();
@@ -36,7 +37,25 @@ export default function Navbar() {
             </span>
           </Link>
         </div>
-        <div className="space-x-4 z-1000 ml-auto">
+        <div className="flex items-center space-x-2">
+          <Link
+            target="_blank"
+            href="https://github.com/Mahdi1bogh/interview-test"
+            className="flex items-center hover:text-gray-500 underline p-2 border-2 rounded-lg"
+          >
+            <Github className="mr-1 h-3 w-3" />
+            <span>frontend</span>
+          </Link>
+          <Link
+            target="_blank"
+            href="https://github.com/Mahdi1bogh/interview-backend"
+            className="flex items-center hover:text-gray-500 underline p-2 border-2 rounded-lg"
+          >
+            <Github className="mr-1 h-3 w-3" />
+            <span>backend</span>
+          </Link>
+        </div>
+        <div className="space-x-4 z-1000 ">
           <div className="flex items-center gap-x-2">
             <ThemeSwitcher />
 

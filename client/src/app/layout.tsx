@@ -7,7 +7,6 @@ import { CartProvider } from "@/contexts/cart-context";
 import { UserProvider } from "@/contexts/user-context";
 import Navbar from "@/components/navbar";
 import type React from "react";
-import GitHubCTAButtons from "@/components/github-buttons";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -49,9 +48,6 @@ export default function RootLayout({
                       {children}
                     </div>
                   </main>
-                </div>
-                <div>
-                  <GitHubCTAButtons />
                 </div>
               </div>
             </CartProvider>
