@@ -6,9 +6,18 @@ import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import CartButton from "@/components/cart-button";
 import { useUser } from "@/contexts/user-context";
+import { useCallback } from "react";
 
 export default function Navbar() {
   const { user, logout, isLoading } = useUser();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  }, [logout]);
 
   return (
     <nav className="backdrop-blur bg-background/50 lg:max-w-[900px] sm:mx-8 mx-4 lg:mx-auto shadow-sm z-50 m-4 border rounded-xl mb-0 border-muted-accent/40 fixed top-0 left-0 right-0">
@@ -39,21 +48,12 @@ export default function Navbar() {
                       variant="ghost"
                       className="w-fit bg-transparent"
                     >
-                      <Link href="/create">Create product</Link>
+                      <Link href="/admin">Admin</Link>
                     </Button>
-                    {user.roles.includes("admin") && (
-                      <Button
-                        asChild
-                        variant="ghost"
-                        className="w-fit bg-transparent"
-                      >
-                        <Link href="/admin">Admin</Link>
-                      </Button>
-                    )}
                     <Button
                       variant="ghost"
                       className="w-fit bg-transparent"
-                      onClick={logout}
+                      onClick={handleLogout}
                     >
                       Logout
                     </Button>

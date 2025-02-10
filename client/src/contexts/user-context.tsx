@@ -1,7 +1,13 @@
 "use client";
 
 import type React from "react";
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -16,7 +22,7 @@ interface UserContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -28,20 +34,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      await fetchUser(token);
-    } else {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchUser = async (token: string) => {
+  const fetchUser = useCallback(async (token: string) => {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/me`,
@@ -52,43 +45,68 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         }
       );
       setUser(response.data);
+      return response.data;
     } catch (error) {
       console.error("Error fetching user:", error);
-      logout();
+      await logout();
+      return null;
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signin`,
-        { email, password }
-      );
-      const { accessToken } = response.data;
-      localStorage.setItem("accessToken", accessToken);
-      await fetchUser(accessToken);
-      router.push("/");
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
-    }
-  };
+  const login = useCallback(
+    async (email: string, password: string) => {
+      try {
+        setIsLoading(true);
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signin`,
+          { email, password }
+        );
+        const { accessToken } = response.data;
+        localStorage.setItem("accessToken", accessToken);
 
-  const logout = () => {
+        // Wait for user data to be fetched and set
+        const userData = await fetchUser(accessToken);
+        if (userData) {
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        setIsLoading(false);
+        throw error;
+      }
+    },
+    [fetchUser, router]
+  );
+
+  const logout = useCallback(async () => {
     localStorage.removeItem("accessToken");
     setUser(null);
-    router.push("/signin");
-  };
+    setIsLoading(false);
+    router.push("/login");
+  }, [router]);
+
+  const checkAuth = useCallback(async () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      await fetchUser(token);
+    } else {
+      setIsLoading(false);
+    }
+  }, [fetchUser]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   // Set up axios interceptor for handling 401 errors
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
         if (error.response?.status === 401) {
-          logout();
+          await logout();
         }
         return Promise.reject(error);
       }
@@ -97,7 +115,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, []);
+  }, [logout]);
 
   return (
     <UserContext.Provider
