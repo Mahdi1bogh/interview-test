@@ -74,7 +74,7 @@ export default function ProductsPage() {
       const response = await axios.get(
         process.env.NEXT_PUBLIC_BACKEND_URL + "/products"
       );
-      setProducts(response.data);
+      setProducts(response.data.products);
     } catch (error) {
       console.error("Error fetching products:", error);
       toast("Error fetching products");
