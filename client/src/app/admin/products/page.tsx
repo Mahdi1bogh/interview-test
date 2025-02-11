@@ -122,7 +122,8 @@ export default function ProductsPage() {
     try {
       if (editingProduct) {
         await axios.patch(
-          `http://localhost:5005/api/v1/products/${editingProduct.id}`,
+          process.env.NEXT_PUBLIC_BACKEND_URL +
+            `/products/${editingProduct.id}`,
           editingProduct,
           {
             headers: {
