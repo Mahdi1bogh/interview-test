@@ -7,6 +7,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/navbar";
 import type React from "react";
 import { UserProvider } from "@/contexts/user-context";
+import Link from "next/link";
+import { Github } from "lucide-react";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -45,6 +47,24 @@ export default function RootLayout({
                 </UserProvider>
                 <main className="mt-12 lg:mt-24">
                   <div className="container py-20 px-4 max-w-4xl md:px-0 w-full">
+                    <div className="flex justify-center md:hidden items-center space-x-2">
+                      <Link
+                        target="_blank"
+                        href="https://github.com/Mahdi1bogh/interview-test"
+                        className="flex items-center hover:text-gray-500 underline p-2 border-2 rounded-lg"
+                      >
+                        <Github className="mr-1 h-3 w-3" />
+                        <span>frontend</span>
+                      </Link>
+                      <Link
+                        target="_blank"
+                        href="https://github.com/Mahdi1bogh/interview-backend"
+                        className="flex items-center hover:text-gray-500 underline p-2 border-2 rounded-lg"
+                      >
+                        <Github className="mr-1 h-3 w-3" />
+                        <span>backend</span>
+                      </Link>
+                    </div>
                     {children}
                   </div>
                 </main>

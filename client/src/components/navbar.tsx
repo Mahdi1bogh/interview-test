@@ -37,7 +37,7 @@ export default function Navbar() {
             </span>
           </Link>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex max-md:hidden items-center space-x-2">
           <Link
             target="_blank"
             href="https://github.com/Mahdi1bogh/interview-test"
