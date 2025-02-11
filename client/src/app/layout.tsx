@@ -3,7 +3,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { CartProvider } from "@/contexts/cart-context";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/navbar";
 import type React from "react";
 import { UserProvider } from "@/contexts/user-context";
@@ -52,6 +52,8 @@ export default function RootLayout({
             </div>
           </CartProvider>
         </ThemeProvider>
+        <SpeedInsights />
+
         <Toaster position="top-center" />
       </body>
     </html>
