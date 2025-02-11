@@ -1,4 +1,5 @@
 import { ProtectedRoute } from "@/components/protected-route";
+import { UserProvider } from "@/contexts/user-context";
 
 export default function Layout({
   children,
@@ -10,14 +11,16 @@ export default function Layout({
   products: React.ReactNode;
 }) {
   return (
-    <ProtectedRoute>
-      <div className="flex-1 overflow-auto p-8">
-        {children}
-        <div className="mt-8 space-y-8">
-          <div>{categories}</div>
-          <div>{products}</div>
+    <UserProvider>
+      <ProtectedRoute>
+        <div className="flex-1 overflow-auto p-8">
+          {children}
+          <div className="mt-8 space-y-8">
+            <div>{categories}</div>
+            <div>{products}</div>
+          </div>
         </div>
-      </div>
-    </ProtectedRoute>
+      </ProtectedRoute>
+    </UserProvider>
   );
 }

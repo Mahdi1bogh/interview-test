@@ -4,9 +4,9 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { CartProvider } from "@/contexts/cart-context";
 
-import { UserProvider } from "@/contexts/user-context";
 import Navbar from "@/components/navbar";
 import type React from "react";
+import { UserProvider } from "@/contexts/user-context";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -37,21 +37,20 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <UserProvider>
-            <CartProvider>
-              <div className="w-full h-full">
-                <div className="max-w-screen lg:max-w-[900px] sm:mx-8 mx-4 lg:mx-auto overflow-hidden">
+          <CartProvider>
+            <div className="w-full h-full">
+              <div className="max-w-screen lg:max-w-[900px] sm:mx-8 mx-4 lg:mx-auto overflow-hidden">
+                <UserProvider>
                   <Navbar />
-
-                  <main className="mt-12 lg:mt-24">
-                    <div className="container py-20 px-4 max-w-4xl md:px-0 w-full">
-                      {children}
-                    </div>
-                  </main>
-                </div>
+                </UserProvider>
+                <main className="mt-12 lg:mt-24">
+                  <div className="container py-20 px-4 max-w-4xl md:px-0 w-full">
+                    {children}
+                  </div>
+                </main>
               </div>
-            </CartProvider>
-          </UserProvider>
+            </div>
+          </CartProvider>
         </ThemeProvider>
         <Toaster position="top-center" />
       </body>
