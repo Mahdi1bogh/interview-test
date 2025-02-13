@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import useFullUrl from "@/hooks/get-full-url";
-import Link from "next/link";
 
 interface Product {
   id: number;
