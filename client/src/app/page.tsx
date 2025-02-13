@@ -150,23 +150,23 @@ export default function ProductsPage() {
     }
   };
 
-  if (!url.includes("https://interview-test-1-nlwn.onrender.com")) {
-    return (
-      <div className="container mx-auto p-4 text-center">
-        <div className="bg-accent/10 text-primary p-4 rounded-lg">
-          <h1 className="text-2xl font-bold">
-            Please use this url for a better initial loading on render
-          </h1>
-          <p className="text-sm">This website is on vercel and it is slow</p>
-          <Link href="https://interview-test-1-nlwn.onrender.com">
-            <p className="underline">
-              https://interview-test-1-nlwn.onrender.com
-            </p>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // if (!url.includes("https://interview-test-1-nlwn.onrender.com")) {
+  //   return (
+  //     <div className="container mx-auto p-4 text-center">
+  //       <div className="bg-accent/10 text-primary p-4 rounded-lg">
+  //         <h1 className="text-2xl font-bold">
+  //           Please use this url for a better initial loading on render
+  //         </h1>
+  //         <p className="text-sm">This website is on vercel and it is slow</p>
+  //         <Link href="https://interview-test-1-nlwn.onrender.com">
+  //           <p className="underline">
+  //             https://interview-test-1-nlwn.onrender.com
+  //           </p>
+  //         </Link>
+  //       </div>
+  //     </div>
+  //   );
+  // }
   if (error) {
     return (
       <div className="container mx-auto p-4 text-center">
