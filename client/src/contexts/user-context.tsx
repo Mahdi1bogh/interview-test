@@ -10,6 +10,7 @@ import {
 } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+// import { toast } from "sonner";
 
 interface User {
   id: string;
@@ -30,20 +31,15 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const userInfoinitial = localStorage.getItem("userInfo");
-  let userDetails = null;
-  if (userInfoinitial !== null) {
-    userDetails = JSON.parse(userInfoinitial);
-  } else {
-    userDetails = null;
-  }
-  const [user, setUser] = useState<User | null>(userDetails);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const logout = useCallback(async () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
+    }
     setUser(null);
     setIsLoading(false);
     router.push("/login");
@@ -83,15 +79,17 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           { email, password }
         );
         const { accessToken } = response.data;
-        localStorage.setItem("accessToken", accessToken);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("accessToken", accessToken);
+        }
 
         const userData = await fetchUser(accessToken);
         if (userData) {
           console.log("userData", userData);
-          localStorage.setItem("user", JSON.stringify(userData));
-
+          if (typeof window !== "undefined") {
+            localStorage.setItem("user", JSON.stringify(userData));
+          }
           setUser(userData);
-
           router.push("/admin");
         }
       } catch (error) {
@@ -104,10 +102,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   );
 
   const checkAuth = useCallback(async () => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      const userData = await fetchUser(token);
-      setUser(userData);
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        const userData = await fetchUser(token);
+        setUser(userData);
+      } else {
+        setIsLoading(false);
+      }
     } else {
       setIsLoading(false);
     }
@@ -132,6 +134,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       axios.interceptors.response.eject(interceptor);
     };
   }, [logout]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userInfoInitial = localStorage.getItem("user");
+      if (userInfoInitial) {
+        setUser(JSON.parse(userInfoInitial));
+      }
+      setIsLoading(false);
+    }
+  }, []);
 
   return (
     <UserContext.Provider

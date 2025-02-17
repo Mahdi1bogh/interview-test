@@ -13,8 +13,10 @@ import { usePathname } from "next/navigation";
 export default function Navbar() {
   const { user, logout, isLoading } = useUser();
   const [userInfo, setUserInfo] = useState(() => {
-    const userItem = localStorage.getItem("user");
-    return userItem ? JSON.parse(userItem) : user;
+    if (typeof window !== "undefined") {
+      const userItem = localStorage.getItem("user");
+      return userItem ? JSON.parse(userItem) : user;
+    }
   });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, forceRender] = useState(false);
@@ -30,9 +32,11 @@ export default function Navbar() {
   useEffect(() => {
     if (pathname.includes("/admin")) {
       forceRender((prev) => !prev); // Force re-render when user updates
-      const userItem = localStorage.getItem("user");
-      if (userItem !== null) {
-        setUserInfo(JSON.parse(userItem));
+      if (typeof window !== "undefined") {
+        const userItem = localStorage.getItem("user");
+        if (userItem !== null) {
+          setUserInfo(JSON.parse(userItem));
+        }
       }
     }
   }, [pathname]);

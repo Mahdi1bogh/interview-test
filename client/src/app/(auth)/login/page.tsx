@@ -50,9 +50,15 @@ export default function SignInPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    await login(values.email, values.password);
-    toast.success("Login successful");
+    try {
+      await login(values.email, values.password);
+      toast.success("Login successful");
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Login failed");
+      setIsLoading(false);
+    }
   }
 
   return (

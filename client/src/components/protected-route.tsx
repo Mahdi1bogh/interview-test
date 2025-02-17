@@ -12,7 +12,6 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !user) {
-      window.location.reload();
       router.push("/login");
     }
   }, [isLoading, isAuthenticated, router, user]);
