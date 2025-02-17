@@ -30,30 +30,49 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const userInfoinitial = localStorage.getItem("userInfo");
+  let userDetails = null;
+  if (userInfoinitial !== null) {
+    userDetails = JSON.parse(userInfoinitial);
+  } else {
+    userDetails = null;
+  }
+  const [user, setUser] = useState<User | null>(userDetails);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const fetchUser = useCallback(async (token: string) => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/me`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setUser(response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      await logout();
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const logout = useCallback(async () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    setUser(null);
+    setIsLoading(false);
+    router.push("/login");
+  }, [router]);
+
+  const fetchUser = useCallback(
+    async (token: string) => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setUser(response.data);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        await logout();
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [logout]
+  );
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -66,10 +85,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         const { accessToken } = response.data;
         localStorage.setItem("accessToken", accessToken);
 
-        // Wait for user data to be fetched and set
         const userData = await fetchUser(accessToken);
         if (userData) {
-          router.push("/");
+          console.log("userData", userData);
+          localStorage.setItem("user", JSON.stringify(userData));
+
+          setUser(userData);
+
+          router.push("/admin");
         }
       } catch (error) {
         console.error("Login error:", error);
@@ -80,17 +103,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     [fetchUser, router]
   );
 
-  const logout = useCallback(async () => {
-    localStorage.removeItem("accessToken");
-    setUser(null);
-    setIsLoading(false);
-    router.push("/login");
-  }, [router]);
-
   const checkAuth = useCallback(async () => {
     const token = localStorage.getItem("accessToken");
     if (token) {
-      await fetchUser(token);
+      const userData = await fetchUser(token);
+      setUser(userData);
     } else {
       setIsLoading(false);
     }
@@ -100,7 +117,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, [checkAuth]);
 
-  // Set up axios interceptor for handling 401 errors
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,

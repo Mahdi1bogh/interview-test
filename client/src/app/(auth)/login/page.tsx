@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Loader2, LogIn } from "lucide-react";
-import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,8 +39,7 @@ const formSchema = z.object({
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const { setUser } = useUser();
-  const router = useRouter();
+  const { login } = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,22 +51,8 @@ export default function SignInPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    try {
-      const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/users/signin",
-        values
-      );
-      localStorage.setItem("accessToken", response.data.accessToken);
-      setUser(response.data.user);
-      router.push("/");
-
-      toast.success("You have successfully signed in.");
-    } catch (error) {
-      console.log(error);
-      toast.error("Invalid email or password. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    await login(values.email, values.password);
+    toast.success("Login successful");
   }
 
   return (
