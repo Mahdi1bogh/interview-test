@@ -39,8 +39,8 @@ interface Product {
   price: number;
   supply: number;
   images: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   categoryId: number;
+  category?: Category;
 }
 
 interface Category {
@@ -56,13 +56,13 @@ export default function ProductsPage() {
     description: "",
     price: 0,
     supply: 0,
-    images: [],
     categoryId: 1,
+    images: [],
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  console.log("products", products);
   useEffect(() => {
     fetchProducts();
     fetchCategories();
@@ -109,10 +109,33 @@ export default function ProductsPage() {
   };
 
   const handleCategoryChange = (value: string) => {
+    const findCategory = categories.find((category) => category.id === +value);
+    console.log("findCategory", findCategory);
     if (editingProduct) {
-      setEditingProduct({ ...editingProduct, categoryId: +value });
+      console.log("editingProduct", editingProduct);
+      const { id, name, description, supply, images, price } = editingProduct;
+      setEditingProduct({
+        id,
+        name,
+        description,
+        supply,
+        images,
+        price,
+        categoryId: +value,
+        category: findCategory,
+      });
     } else {
-      setNewProduct({ ...newProduct, categoryId: +value });
+      const { name, description, supply, images, price } = newProduct;
+
+      setNewProduct({
+        name,
+        description,
+        supply,
+        images,
+        price,
+        categoryId: +value,
+        category: findCategory,
+      });
     }
   };
 
@@ -132,6 +155,7 @@ export default function ProductsPage() {
           }
         );
         toast("Product updated successfully");
+        fetchProducts();
       } else {
         await axios.post(
           process.env.NEXT_PUBLIC_BACKEND_URL + "/products",
@@ -153,6 +177,7 @@ export default function ProductsPage() {
           }
         );
         toast("Product added successfully");
+        fetchProducts();
       }
       setIsDialogOpen(false);
       setEditingProduct(null);
@@ -190,6 +215,8 @@ export default function ProductsPage() {
         }
       );
       toast("Product deleted successfully");
+      // window.location.reload();
+
       fetchProducts();
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -287,13 +314,16 @@ export default function ProductsPage() {
                   <Select
                     value={
                       editingProduct
-                        ? editingProduct.categoryId + ""
+                        ? editingProduct.category?.id + ""
                         : newProduct.categoryId + ""
                     }
                     onValueChange={handleCategoryChange}
                   >
                     <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="Select a category" />
+                      <SelectValue
+                        className="text-white placeholder:text-white"
+                        placeholder="Select a category"
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((category) => (
@@ -336,7 +366,7 @@ export default function ProductsPage() {
                 <TableCell>{product.description}</TableCell>
                 <TableCell>${product.price}</TableCell>
                 <TableCell>{product.supply}</TableCell>
-                <TableCell>{product.categoryId}</TableCell>
+                <TableCell>{product.category?.title}</TableCell>
                 <TableCell>
                   <Button
                     variant="outline"
