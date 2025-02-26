@@ -33,6 +33,8 @@ interface Category {
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [newCategory, setNewCategory] = useState<Omit<Category, "id">>({
     title: "",
     description: "",
@@ -69,6 +71,7 @@ export default function CategoriesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       if (editingCategory) {
         await axios.patch(
@@ -82,6 +85,7 @@ export default function CategoriesPage() {
           }
         );
         toast("Category updated successfully");
+        fetchCategories();
       } else {
         await axios.post(
           process.env.NEXT_PUBLIC_BACKEND_URL + "/categories",
@@ -93,6 +97,8 @@ export default function CategoriesPage() {
           }
         );
         toast("Category added successfully");
+
+        fetchCategories();
       }
       setIsDialogOpen(false);
       setEditingCategory(null);
@@ -184,8 +190,12 @@ export default function CategoriesPage() {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">
-                  {editingCategory ? "Update" : "Add"} Category
+                <Button disabled={isLoading} type="submit">
+                  {isLoading
+                    ? "Loading..."
+                    : editingCategory
+                    ? "Update"
+                    : "Add"}
                 </Button>
               </DialogFooter>
             </form>

@@ -45,18 +45,7 @@ export default function Navbar() {
     <nav className="backdrop-blur bg-background/50 lg:max-w-[900px] sm:mx-8 mx-4 lg:mx-auto shadow-sm z-50 m-4 border rounded-xl mb-0 border-muted-accent/40 fixed top-0 left-0 right-0">
       <div className="flex flex-row items-center justify-between px-4 py-2 z-100">
         <div className="flex items-center space-x-2">
-          <Link href="/">
-            <Image
-              src="https://media.licdn.com/dms/image/v2/D4D0BAQFYDZFOuXPAOA/company-logo_100_100/company-logo_100_100/0/1738788906242/4_ventures_logo?e=1747267200&v=beta&t=tmp8v40aXXXq9EAUG4LYeAIa3JTkM4ohjHP96IRBCuc"
-              alt="logo"
-              width={32}
-              height={32}
-              className="max-md:hidden"
-            />
-            <span className="text-sm font-[family-name:var(--font-geist-mono)]">
-              4+Ventures store
-            </span>
-          </Link>
+          <Link href="/">Test Store</Link>
         </div>
         <div className="flex max-md:hidden items-center space-x-2">
           <Link

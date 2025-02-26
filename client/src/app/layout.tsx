@@ -16,7 +16,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "4+Ventures store",
+  title: "test store",
   description: "Best ecommerce store in the world",
 };
 

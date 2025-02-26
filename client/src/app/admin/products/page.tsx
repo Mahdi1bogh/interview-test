@@ -215,7 +215,6 @@ export default function ProductsPage() {
         }
       );
       toast("Product deleted successfully");
-      // window.location.reload();
 
       fetchProducts();
     } catch (error) {
